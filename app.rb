@@ -32,6 +32,13 @@ get '/new' do
 end
 
 post '/new' do
-  @content = params[:content]
-  erb "Your typed #{@content}"
+	@content = params[:content]
+  		if @content.strip.length <= 0
+  			@error = "Введите текст"
+  			return erb :new
+  		end
+  	
+  	@db.execute 'insert into Posts (created_date, content) values (datetime(), ?)', [@content]
+	erb "Your typed #{@content}"
+	
 end
